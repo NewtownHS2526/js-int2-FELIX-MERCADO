@@ -102,3 +102,128 @@ const inventory = [
 // - Returns detailed order summary
 // - Uses all function concepts: closures, HOFs, composition, recursion where needed
 
+// MathUtils Object
+const MathUtils = {
+    add: (...numbers) => numbers.reduce((a, b) => a + b, 0),
+    multiply: (...numbers) => numbers.reduce((a, b) => a * b, 1),
+    average: (...numbers) => numbers.length ? MathUtils.add(...numbers) / numbers.length : 0,
+    range: (min, max) => {
+        if (min > max) throw new Error("min cannot be greater than max");
+        return Array.from({ length: max - min + 1 }, (_, i) => i + min);
+    },
+    random: (min, max) => {
+        if (min > max) throw new Error("min cannot be greater than max");
+        return Math.random() * (max - min) + min;
+    }
+};
+
+// Function composition system
+const pipe = (...fns) => (value) => fns.reduce((v, fn) => fn(v), value);
+const compose = (...fns) => (value) => fns.reduceRight((v, fn) => fn(v), value);
+const chain = (initial, ...fns) => fns.reduce((v, fn) => fn(v), initial);
+
+// Decorator system
+const memoize = (fn) => {
+    const cache = new Map();
+    return (...args) => {
+        const key = JSON.stringify(args);
+        if (cache.has(key)) return cache.get(key);
+        const result = fn(...args);
+        cache.set(key, result);
+        return result;
+    };
+};
+
+const debounce = (fn, delay) => {
+    let timer;
+    return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn(...args), delay);
+    };
+};
+
+const throttle = (fn, limit) => {
+    let lastCall = 0;
+    return (...args) => {
+        const now = Date.now();
+        if (now - lastCall >= limit) {
+            lastCall = now;
+            fn(...args);
+        }
+    };
+};
+
+const retry = (fn, maxRetries = 3) => async (...args) => {
+    let attempts = 0;
+    while (attempts <= maxRetries) {
+        try {
+            return await fn(...args);
+        } catch (err) {
+            if (attempts === maxRetries) throw err;
+            attempts++;
+        }
+    }
+};
+
+// InventoryManager system
+const InventoryManager = (inventory) => ({
+    // Query functions
+    findByCategory: (category) => inventory.filter((item) => item.category === category),
+    filterByPrice: (min, max) => inventory.filter((item) => item.price >= min && item.price <= max),
+    filterByStock: (minStock) => inventory.filter((item) => item.stock >= minStock),
+    searchByName: (name) => inventory.filter((item) => item.name.toLowerCase().includes(name.toLowerCase())),
+
+    // Transformation functions
+    applyDiscount: (percent) => inventory.map((item) => ({ ...item, price: item.price * (1 - percent / 100) })),
+    addTax: (rate) => inventory.map((item) => ({ ...item, price: item.price * (1 + rate / 100) })),
+    formatCurrency: (currency) => inventory.map((item) => ({ ...item, price: `${currency}${item.price.toFixed(2)}` })),
+
+    // Aggregation functions
+    totalValue: () => inventory.reduce((sum, item) => sum + item.price * item.stock, 0),
+    averagePrice: () => inventory.reduce((sum, item) => sum + item.price, 0) / inventory.length,
+    stockByCategory: () => inventory.reduce((acc, item) => {
+        acc[item.category] = (acc[item.category] || 0) + item.stock;
+        return acc;
+    }, {}),
+
+    // Operation functions using closures
+    createUpdateStock: (itemId) => (amount) => {
+        const item = inventory.find((i) => i.id === itemId);
+        if (item) item.stock += amount;
+        return item;
+    },
+    createPriceAdjuster: (multiplier) => () => inventory.forEach((item) => (item.price *= multiplier)),
+
+    // Full order processing system
+    processOrder: function(order) {
+        // validate items
+        const isValidItem = (id) => inventory.some((item) => item.id === id);
+        order.items.forEach((entry) => {
+            if (!isValidItem(entry.id)) throw new Error(`Invalid item ID: ${entry.id}`);
+        });
+
+        // calculate totals using composition
+        const calculateItemTotal = (item) => item.price * item.quantity;
+        const total = order.items.reduce((sum, entry) => {
+            const item = inventory.find((i) => i.id === entry.id);
+            return sum + calculateItemTotal({ price: item.price, quantity: entry.quantity });
+        }, 0);
+
+        // apply discount using decorator
+        const discountFn = memoize((t, d) => t * (1 - d / 100));
+        const finalTotal = discountFn(total, order.discount || 0);
+
+        // update inventory
+        order.items.forEach((entry) => {
+            const updateStock = this.createUpdateStock(entry.id);
+            updateStock(-entry.quantity);
+        });
+
+        return {
+            originalTotal: total,
+            finalTotal,
+            items: order.items,
+            remainingInventory: inventory
+        };
+    }
+});

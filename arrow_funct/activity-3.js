@@ -64,3 +64,129 @@ const button = {
 // 6. Use both to transform the number 5 using all three operations in different orders. 
 //    What are the results?
 
+/*
+ * ACTIVITY 3: Advanced Arrow Function Patterns
+ */
+
+// ===================== Problem 1 =====================
+// Implicit vs Explicit Returns
+
+// 1️⃣ Single expression → implicit return
+const add = (a, b) => a + b;
+console.log(add(3, 4)); // 7
+
+// 2️⃣ Conditional logic → explicit return
+const checkEven = (num) => {
+    if (num % 2 === 0) {
+        return "Even";
+    } else {
+        return "Odd";
+    }
+};
+console.log(checkEven(5)); // Odd
+
+// 3️⃣ Needs to log before returning → explicit return
+const greetWithLog = (name) => {
+    console.log("Greeting user...");
+    return "Hello, " + name + "!";
+};
+console.log(greetWithLog("Felix")); // Greeting user... Hello, Felix!
+
+// 4️⃣ Return an object literal
+// Implicit return (needs parentheses)
+const createPointImplicit = (x, y) => ({x, y});
+console.log(createPointImplicit(2, 3)); // {x: 2, y: 3}
+
+// Explicit return
+const createPointExplicit = (x, y) => {
+    return {x, y};
+};
+console.log(createPointExplicit(5, 6)); // {x: 5, y: 6}
+
+// ===================== Problem 2 =====================
+// Arrow Functions with Destructuring
+
+// 1️⃣ Object {x, y} → distance from origin
+const distanceFromOrigin = ({x, y}) => Math.sqrt(x*x + y*y);
+console.log(distanceFromOrigin({x: 3, y: 4})); // 5
+
+// 2️⃣ Array [firstName, lastName, age] → formatted string
+const formatPersonArray = ([firstName, lastName, age]) => 
+    `First Name: ${firstName}, Last Name: ${lastName}, Age: ${age}`;
+console.log(formatPersonArray(["Felix", "Mercado", 15]));
+
+// 3️⃣ Nested object {user: {name, email}} → formatted string
+const formatNestedUser = ({user: {name, email}}) => 
+    `Name: ${name}, Email: ${email}`;
+console.log(formatNestedUser({user: {name: "Felix", email: "felix@example.com"}}));
+
+// 4️⃣ Challenge: Process different formats
+const processUserData = (data) => {
+    if (Array.isArray(data)) return formatPersonArray(data);
+    if (data.user) return formatNestedUser(data);
+    if (data.x !== undefined && data.y !== undefined) return distanceFromOrigin(data);
+};
+console.log(processUserData({x: 6, y: 8})); // 10
+console.log(processUserData(["John", "Doe", 30])); // formatted string
+console.log(processUserData({user: {name: "Alice", email: "alice@example.com"}})); // formatted string
+
+// ===================== Problem 3 =====================
+// Arrow Functions and Event Handlers
+
+// Click event → increment counter
+const onClick = () => button.counter += 1;
+onClick();
+console.log(button.counter); // 1
+
+// Double-click event → reset counter
+const onDoubleClick = () => button.counter = 0;
+onDoubleClick();
+console.log(button.counter); // 0
+
+// Mouseover event → change button text
+const onMouseOver = () => button.text = "Hovered!";
+onMouseOver();
+console.log(button.text); // Hovered!
+
+// Challenge: Counter component with localStorage (simplified example)
+const Counter = (() => {
+    const key = "counterValue";
+    const get = () => parseInt(localStorage.getItem(key)) || 0;
+    const set = (val) => localStorage.setItem(key, val);
+    let count = get();
+
+    return {
+        click: () => { count++; set(count); return count; },
+        reset: () => { count = 0; set(count); return count; },
+        value: () => get()
+    };
+})();
+
+// Usage example:
+// console.log(Counter.click()); // increment
+// console.log(Counter.reset()); // reset
+
+// ===================== Problem 4 =====================
+// Functional Composition
+
+// increment
+const increment = x => x + 1;
+
+// double
+const doubleNum = x => x * 2;
+
+// square
+const square = x => x * x;
+
+// pipe (left-to-right)
+const pipe = (...fns) => (x) => fns.reduce((acc, fn) => fn(acc), x);
+
+// compose (right-to-left)
+const compose = (...fns) => (x) => fns.reduceRight((acc, fn) => fn(acc), x);
+
+// Transform number 5
+const resultPipe = pipe(increment, doubleNum, square)(5); 
+console.log(resultPipe); // ((5+1)*2)^2 = 144
+
+const resultCompose = compose(increment, doubleNum, square)(5);
+console.log(resultCompose); // increment(double(square(5))) = increment(double(25)) = increment(50) = 5

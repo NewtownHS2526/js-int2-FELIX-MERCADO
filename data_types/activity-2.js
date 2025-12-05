@@ -102,3 +102,71 @@ function addNumbers(a, b) {
 // - Returns {success: true, result: sum} or {success: false, error: message}
 // - Never throws errors, always returns a result object
 
+/* Activity 2: Type Conversion and Coercion - Full Solutions */
+
+// Problem 1: Explicit Type Conversion
+function smartConvert(value, targetType) {
+  try {
+    switch (targetType) {
+      case "number": {
+        const num = Number(value);
+        return isNaN(num) ? null : num;
+      }
+      case "string":
+        return String(value);
+      case "boolean":
+        return Boolean(value);
+      default:
+        return null;
+    }
+  } catch {
+    return null;
+  }
+}
+
+// Problem 2: Type Coercion examples
+const coercionExamples = {
+  plus1: "5" + 3,
+  plus2: 5 + "3",
+  minus: "5" - 3,
+  multiply: "5" * 3,
+  divide: "5" / 3,
+  eqLoose: "5" == 5,
+  eqStrict: "5" === 5,
+  zeroFalseLoose: 0 == false,
+  zeroFalseStrict: 0 === false,
+};
+
+// Problem 3: Type Checking
+function getType(value) {
+  if (value === null) return "null";
+  if (Array.isArray(value)) return "array";
+  return typeof value; // number, string, boolean, undefined, function, object
+}
+
+// Problem 4: Type Safety
+function addNumbers(a, b) {
+  if (typeof a !== "number" || typeof b !== "number") {
+    return "Error: Both parameters must be numbers";
+  }
+  return a + b;
+}
+
+function safeAdd(a, b) {
+  const convertNum = (x) => {
+    if (typeof x === "number") return x;
+    if (typeof x === "string" && x.trim() !== "" && !isNaN(Number(x))) {
+      return Number(x);
+    }
+    return null;
+  };
+
+  const n1 = convertNum(a);
+  const n2 = convertNum(b);
+
+  if (n1 === null || n2 === null) {
+    return { success: false, error: "Invalid number inputs" };
+  }
+
+  return { success: true, result: n1 + n2 };
+}

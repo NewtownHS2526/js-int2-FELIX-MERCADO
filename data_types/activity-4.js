@@ -85,3 +85,42 @@ const bigNum2 = 456n; // BigInt literal
 //    - Handles invalid inputs gracefully
 //    - Returns null if conversion fails
 
+// ACTIVITY 4: Special Data Types and Values
+
+// Problem 1: NaN Handling
+function safeDivide(a, b) {
+    const result = a / b;
+    if (!Number.isFinite(result) || Number.isNaN(result)) return null;
+    return result;
+}
+
+// Problem 2: Infinity Handling
+function safeNumber(value) {
+    return typeof value === "number" && Number.isFinite(value);
+}
+
+// Problem 3: Symbol Type
+function createUniqueKey(description) {
+    return Symbol(description);
+}
+
+// Example of using symbol for private property
+function createObjectWithPrivate(desc, value) {
+    const key = Symbol(desc);
+    return {
+        [key]: value,
+        getPrivate: () => value
+    };
+}
+
+// Problem 4: BigInt Handling
+function safeBigInt(input) {
+    try {
+        if (typeof input === "bigint") return input;
+        if (typeof input === "number" && Number.isInteger(input)) return BigInt(input);
+        if (typeof input === "string" && /^-?\d+$/.test(input)) return BigInt(input);
+        return null;
+    } catch {
+        return null;
+    }
+}

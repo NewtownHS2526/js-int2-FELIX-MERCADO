@@ -94,3 +94,58 @@ const obj2 = obj1;
 //    - Handles nested structures
 //    - Test that modifications to copy don't affect original
 
+// ACTIVITY 3: Objects and Arrays
+
+// Problem 1: Object Basics
+function objectInfo(obj) {
+    const keys = Object.keys(obj);
+    const values = Object.values(obj);
+    return {
+        keys,
+        values,
+        size: keys.length,
+        isEmpty: keys.length === 0
+    };
+}
+
+// Problem 2: Array Basics
+function arrayInfo(arr) {
+    return {
+        length: arr.length,
+        first: arr[0],
+        last: arr[arr.length - 1],
+        isEmpty: arr.length === 0,
+        type: "array"
+    };
+}
+
+// Problem 3: Nested Data Structures
+function deepAccess(obj, path) {
+    const parts = path.split(".");
+    let current = obj;
+
+    for (const part of parts) {
+        if (current == null) return null;
+        current = current[part];
+    }
+    return current === undefined ? null : current;
+}
+
+// Problem 4: Reference vs Value
+function deepCopy(value) {
+    if (value === null || typeof value !== "object") {
+        return value;
+    }
+
+    if (Array.isArray(value)) {
+        return value.map(item => deepCopy(item));
+    }
+
+    const result = {};
+    for (const key in value) {
+        if (value.hasOwnProperty(key)) {
+            result[key] = deepCopy(value[key]);
+        }
+    }
+    return result;
+}

@@ -94,3 +94,95 @@ const person = {
 //    - Takes additional arguments using arguments or rest
 //    - Calls the function after delay with those arguments
 
+// Problem 1: Default Parameters
+
+function greet(name = "Guest") {
+    return `Hello, ${name}!`;
+}
+
+function calculateArea(length = 10, width = 5) {
+    return length * width;
+}
+
+function createUser(name, age = 18, active = true, role = "user") {
+    return { name, age, active, role };
+}
+
+// Problem 2: Rest Parameters
+
+function sum(...numbers) {
+    return numbers.reduce((a, b) => a + b, 0);
+}
+
+function findMax(...numbers) {
+    return Math.max(...numbers);
+}
+
+function joinStrings(separator, ...strings) {
+    return strings.join(separator);
+}
+
+function calculate(operation, ...numbers) {
+    switch (operation) {
+        case "add":
+            return numbers.reduce((a, b) => a + b, 0);
+        case "multiply":
+            return numbers.reduce((a, b) => a * b, 1);
+        case "subtract":
+            return numbers.reduce((a, b) => a - b);
+        case "divide":
+            return numbers.reduce((a, b) => a / b);
+        default:
+            return null;
+    }
+}
+
+// Problem 3: Destructuring Parameters
+
+function displayPerson({ name, age, city }) {
+    return `${name} is ${age} years old and lives in ${city}.`;
+}
+
+function processCoordinates({ x, y }) {
+    return Math.sqrt(x * x + y * y);
+}
+
+function createEmail({ firstName = "user", lastName = "unknown", domain = "example" }) {
+    return `${firstName}.${lastName}@${domain}.com`;
+}
+
+// Problem 4: Arguments Object
+
+function logArguments() {
+    const args = Array.from(arguments);
+    console.log(args);
+    return args;
+}
+
+function findLongest() {
+    let longest = "";
+    for (let i = 0; i < arguments.length; i++) {
+        if (typeof arguments[i] === "string" && arguments[i].length > longest.length) {
+            longest = arguments[i];
+        }
+    }
+    return longest;
+}
+
+// Comparison: arguments vs rest
+
+function longestWithArguments() {
+    let longest = "";
+    for (let i = 0; i < arguments.length; i++) {
+        if (typeof arguments[i] === "string" && arguments[i].length > longest.length) longest = arguments[i];
+    }
+    return longest;
+}
+
+function longestWithRest(...strings) {
+    return strings.reduce((longest, str) => (str.length > longest.length ? str : longest), "");
+}
+
+function callWithDelay(fn, delay, ...args) {
+    setTimeout(() => fn(...args), delay);
+}

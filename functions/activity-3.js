@@ -5,7 +5,7 @@
  * Understand function scope and lexical scope
  */
 
-let globalVar = "I'm global";
+// let globalVar = "I'm global";
 
 // Your task:
 // 1. Create a function 'testScope' that:
@@ -87,3 +87,113 @@ let globalVar = "I'm global";
 //    - Cache persists between method calls
 //    - Example: const cache = createCache(); cache.set("key", "value"); cache.get("key");
 
+// Problem 1: Variable Scope
+
+let globalVar = "I'm global";
+
+function testScope() {
+    let globalVar = "I'm local";
+    console.log("Global:", window.globalVar);
+    console.log("Local:", globalVar);
+}
+
+function outerFunction() {
+    let outerVar = "I'm outside";
+
+    function innerFunction() {
+        let innerVar = "I'm inside";
+        console.log(outerVar);
+        return innerVar;
+    }
+
+    const inner = innerFunction();
+
+    // innerVar is NOT accessible here
+    return { inner };
+}
+
+function scopeDemo() {
+    var functionVar = "I'm function-scoped";
+
+    if (true) {
+        let blockVar = "I'm block-scoped";
+        console.log(globalVar, functionVar, blockVar);
+    }
+
+    // blockVar is NOT accessible here
+    console.log(globalVar, functionVar);
+}
+
+// Problem 2: Closures
+
+const createCounter = () => {
+    let count = 0;
+    return () => ++count;
+};
+
+const createMultiplier = (num) => (value) => num * value;
+
+const createBankAccount = () => {
+    let balance = 0;
+    return {
+        deposit: (amount) => (balance += amount),
+        withdraw: (amount) => {
+            if (amount > balance) return "Insufficient funds";
+            balance -= amount;
+            return balance;
+        },
+        getBalance: () => balance
+    };
+};
+
+// Problem 3: IIFE
+
+(function () {
+    console.log("IIFE executed immediately!");
+})();
+
+const sumIIFE = (function (a, b) {
+    return a + b;
+})(5, 3);
+
+const calculatorModule = (function () {
+    let history = [];
+
+    function record(op, result) {
+        history.push({ op, result });
+    }
+
+    return {
+        add: (a, b) => {
+            const r = a + b;
+            record("add", r);
+            return r;
+        },
+        subtract: (a, b) => {
+            const r = a - b;
+            record("subtract", r);
+            return r;
+        },
+        getHistory: () => [...history]
+    };
+})();
+
+// Problem 4: Closure in Practice
+
+const createLogger = (prefix) => (msg) => console.log(`[${prefix}] ${msg}`);
+
+const createValidator = (rules) => (value) => {
+    for (let rule of rules) {
+        if (!rule(value)) return false;
+    }
+    return true;
+};
+
+const createCache = () => {
+    let store = {};
+    return {
+        set: (key, value) => (store[key] = value),
+        get: (key) => store[key],
+        clear: () => (store = {})
+    };
+};

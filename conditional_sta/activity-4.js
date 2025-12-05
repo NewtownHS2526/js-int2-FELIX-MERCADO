@@ -5,7 +5,7 @@
  * Use conditionals to control loop behavior
  */
 
-const numbers = [5, 12, 8, 20, 3, 15, 7];
+// const numbers = [5, 12, 8, 20, 3, 15, 7];
 
 // Your task:
 // 1. Loop through numbers and log only even numbers
@@ -22,7 +22,7 @@ const numbers = [5, 12, 8, 20, 3, 15, 7];
 // Control loop flow with conditionals
 // ============================================================================
 
-const scores = [85, 92, 78, 95, 88, 65, 90];
+// const scores = [85, 92, 78, 95, 88, 65, 90];
 
 // Your task:
 // 1. Loop through scores and stop when you find a score < 70 (use break)
@@ -40,11 +40,11 @@ const scores = [85, 92, 78, 95, 88, 65, 90];
 // Use conditionals in nested loop structures
 // ============================================================================
 
-const matrix = [
-    [1, 2, 3],
-    [4, 5, 6],
-    [7, 8, 9]
-];
+// const matrix = [
+//     [1, 2, 3],
+//     [4, 5, 6],
+//     [7, 8, 9]
+// ];
 
 // Your task:
 // 1. Loop through matrix and log all even numbers
@@ -61,12 +61,12 @@ const matrix = [
 // Complex loop scenarios with conditionals
 // ============================================================================
 
-const students = [
-    { name: "Alice", grade: 85, attendance: 95 },
-    { name: "Bob", grade: 92, attendance: 88 },
-    { name: "Charlie", grade: 65, attendance: 75 },
-    { name: "Diana", grade: 78, attendance: 90 }
-];
+// const students = [
+//     { name: "Alice", grade: 85, attendance: 95 },
+//     { name: "Bob", grade: 92, attendance: 88 },
+//     { name: "Charlie", grade: 65, attendance: 75 },
+//     { name: "Diana", grade: 78, attendance: 90 }
+// ];
 
 // Your task:
 // 1. Loop through students and log names of those who passed (grade >= 70)
@@ -81,3 +81,174 @@ const students = [
 //      - excellent: array of students with grade >= 90 AND attendance >= 95
 //    - Use loops with multiple conditionals
 
+//  Problem 1 
+
+const numbers = [5, 12, 8, 20, 3, 15, 7];
+
+// 1. Log only even numbers
+for (let num of numbers) {
+    if (num % 2 === 0) {
+        console.log(num);
+    }
+}
+
+// 2. Log numbers greater than 10
+for (let num of numbers) {
+    if (num > 10) {
+        console.log(num);
+    }
+}
+
+// 3. Sum of positive numbers
+let sum = 0;
+for (let num of numbers) {
+    if (num > 0) {
+        sum += num;
+    }
+}
+console.log("Sum of positive numbers:", sum);
+
+// 4. Challenge: filterAndTransform function
+function filterAndTransform(arr) {
+    const result = [];
+    for (let num of arr) {
+        if (num > 10) {
+            result.push(num * 2);
+        }
+    }
+    return result;
+}
+
+console.log(filterAndTransform(numbers)); // Example usage
+
+//  Problem 2 
+
+const scores = [85, 92, 78, 95, 88, 65, 90];
+
+// 1. Stop loop when score < 70
+for (let score of scores) {
+    if (score < 70) break;
+    console.log(score);
+}
+
+// 2. Skip scores < 80
+for (let score of scores) {
+    if (score < 80) continue;
+    console.log(score);
+}
+
+// 3. Find first score >= 90
+for (let i = 0; i < scores.length; i++) {
+    if (scores[i] >= 90) {
+        console.log("First score >= 90 at index:", i);
+        break;
+    }
+}
+
+// 4. Challenge: findFirstPassingScore function
+function findFirstPassingScore(arr, threshold) {
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i] >= threshold) return i;
+    }
+    return -1;
+}
+
+console.log(findFirstPassingScore(scores, 90));
+
+//  Problem 3 
+
+const matrix = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+];
+
+// 1. Log all even numbers
+for (let row of matrix) {
+    for (let num of row) {
+        if (num % 2 === 0) console.log(num);
+    }
+}
+
+// 2. Sum all numbers
+let matrixSum = 0;
+for (let row of matrix) {
+    for (let num of row) {
+        matrixSum += num;
+    }
+}
+console.log("Sum of all numbers:", matrixSum);
+
+// 3. Find maximum value
+let maxVal = matrix[0][0];
+for (let row of matrix) {
+    for (let num of row) {
+        if (num > maxVal) maxVal = num;
+    }
+}
+console.log("Maximum value:", maxVal);
+
+// 4. Challenge: findInMatrix function
+function findInMatrix(matrix, target) {
+    for (let r = 0; r < matrix.length; r++) {
+        for (let c = 0; c < matrix[r].length; c++) {
+            if (matrix[r][c] === target) {
+                return { row: r, col: c };
+            }
+        }
+    }
+    return null;
+}
+
+console.log(findInMatrix(matrix, 5));
+
+//  Problem 4 
+
+const students = [
+    { name: "Alice", grade: 85, attendance: 95 },
+    { name: "Bob", grade: 92, attendance: 88 },
+    { name: "Charlie", grade: 65, attendance: 75 },
+    { name: "Diana", grade: 78, attendance: 90 }
+];
+
+// 1. Log names of students who passed (grade >= 70)
+for (let student of students) {
+    if (student.grade >= 70) console.log(student.name);
+}
+
+// 2. Count students with perfect attendance
+let perfectAttendance = 0;
+for (let student of students) {
+    if (student.attendance === 100) perfectAttendance++;
+}
+console.log("Students with perfect attendance:", perfectAttendance);
+
+// 3. Find first student with grade < 70
+for (let student of students) {
+    if (student.grade < 70) {
+        console.log("First failing student:", student.name);
+        break;
+    }
+}
+
+// 4. Challenge: analyzeStudents function
+function analyzeStudents(students) {
+    const result = {
+        passed: [],
+        failed: [],
+        excellent: []
+    };
+
+    for (let student of students) {
+        if (student.grade >= 70) result.passed.push(student);
+        else result.failed.push(student);
+
+        if (student.grade >= 90 && student.attendance >= 95) {
+            result.excellent.push(student);
+        }
+    }
+
+    return result;
+}
+
+console.log(analyzeStudents(students));

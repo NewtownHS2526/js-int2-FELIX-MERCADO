@@ -5,8 +5,8 @@
  * Master string manipulation
  */
 
-const text = "Hello World";
-const email = "user@example.com";
+// const text = "Hello World";
+// const email = "user@example.com";
 
 // Your task:
 // 1. String methods:
@@ -24,9 +24,9 @@ const email = "user@example.com";
 // Use template literals for string interpolation
 // ============================================================================
 
-const name = "Alice";
-const age = 30;
-const city = "New York";
+// const name = "Alice";
+// const age = 30;
+// const city = "New York";
 
 // Your task:
 // 1. Create strings using template literals:
@@ -44,9 +44,9 @@ const city = "New York";
 // Convert and parse strings
 // ============================================================================
 
-const numStr = "123.45";
-const dateStr = "2024-12-15";
-const csvLine = "apple,banana,orange";
+// const numStr = "123.45";
+// const dateStr = "2024-12-15";
+// const csvLine = "apple,banana,orange";
 
 // Your task:
 // 1. Parse number from string:
@@ -77,3 +77,96 @@ const csvLine = "apple,banana,orange";
 //    - Validates format according to type
 //    - Returns detailed error messages
 
+// Problem 1: String Methods
+const text = "Hello World";
+const email = "user@example.com";
+
+console.log(text.toUpperCase());
+console.log(text.toLowerCase());
+console.log(text.indexOf("World"));
+console.log(text.includes("Hello"));
+console.log(text.slice(0,5));
+console.log(text.substring(0,5));
+console.log(text.replace("World","JavaScript"));
+
+export function analyzeString(str){
+  return {
+    length: str.length,
+    wordCount: str.trim().split(/\s+/).length,
+    hasNumbers: /[0-9]/.test(str),
+    hasLetters: /[a-zA-Z]/.test(str),
+    uppercase: str.toUpperCase(),
+    lowercase: str.toLowerCase()
+  };
+}
+
+// Problem 2: Template Literals
+const name = "Alice";
+const age = 30;
+const city = "New York";
+
+console.log(`My name is ${name}`);
+console.log(`I live in ${city}.
+This is a multi-line string.`);
+console.log(`Next year I'll be ${age + 1}`);
+
+export function formatEmail({firstName, lastName, domain}){
+  return `${firstName}.${lastName}@${domain}.com`;
+}
+
+// Problem 3: String Conversion and Parsing
+const numStr = "123.45";
+const dateStr = "2024-12-15";
+const csvLine = "apple,banana,orange";
+
+console.log(parseInt(numStr));
+console.log(parseFloat(numStr));
+console.log(Number(numStr));
+console.log(+numStr);
+console.log(csvLine.split(","));
+
+export function parseCSV(line){
+  const result=[];
+  let curr='';
+  let inQuotes=false;
+  for(let i=0;i<line.length;i++){
+    const ch=line[i];
+    if(ch==='"'){
+      inQuotes=!inQuotes;
+    } else if(ch===',' && !inQuotes){
+      result.push(autoConvert(curr.trim()));
+      curr='';
+    } else {
+      curr+=ch;
+    }
+  }
+  result.push(autoConvert(curr.trim()));
+  return result;
+}
+
+function autoConvert(val){
+  if(!isNaN(val) && val!=='' ) return Number(val);
+  return val;
+}
+
+// Problem 4: String Validation
+export function validateString(str,type){
+  const errors=[];
+  let valid=true;
+
+  if(type==="email"){
+    const regex=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if(!regex.test(str)){ valid=false; errors.push("Invalid email format"); }
+  }
+  else if(type==="phone"){
+    const regex=/^[0-9]{10}$/;
+    if(!regex.test(str)){ valid=false; errors.push("Phone must be 10 digits"); }
+  }
+  else if(type==="password"){
+    if(str.length<8) {valid=false; errors.push("Password too short");}
+    if(!/[A-Z]/.test(str)) {valid=false; errors.push("Missing uppercase letter");}
+    if(!/[0-9]/.test(str)) {valid=false; errors.push("Missing number");}
+  }
+
+  return {valid, errors};
+}

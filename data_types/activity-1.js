@@ -5,10 +5,10 @@
  * Work with numbers and understand numeric operations
  */
 
-const num1 = 10;
-const num2 = 3.14;
-const num3 = -5;
-const num4 = 1e6; // Scientific notation
+// const num1 = 10;
+// const num2 = 3.14;
+// const num3 = -5;
+// const num4 = 1e6; // Scientific notation
 
 // Your task:
 // 1. Log the type of each number using typeof operator
@@ -28,9 +28,9 @@ const num4 = 1e6; // Scientific notation
 // Work with strings and string operations
 // ============================================================================
 
-const str1 = "Hello";
-const str2 = 'World';
-const str3 = `Template`;
+// const str1 = "Hello";
+// const str2 = 'World';
+// const str3 = `Template`;
 
 // Your task:
 // 1. Log the type of each string
@@ -49,10 +49,10 @@ const str3 = `Template`;
 // Work with boolean values and logical operations
 // ============================================================================
 
-const bool1 = true;
-const bool2 = false;
-const truthy1 = 1;
-const falsy1 = 0;
+// const bool1 = true;
+// const bool2 = false;
+// const truthy1 = 1;
+// const falsy1 = 0;
 
 // Your task:
 // 1. Log the type of bool1 and bool2
@@ -71,8 +71,8 @@ const falsy1 = 0;
 // Understand the difference between undefined and null
 // ============================================================================
 
-let undefVar;
-const nullVar = null;
+// let undefVar;
+// const nullVar = null;
 
 // Your task:
 // 1. Check types: typeof undefVar, typeof nullVar
@@ -88,3 +88,76 @@ const nullVar = null;
 //    - Returns: "undefined", "null", "empty string", "zero", or "has value"
 //    - Handles all edge cases appropriately
 
+// ACTIVITY 1: Primitive Data Types
+
+// Problem 1: Number Type
+// const num1 = 10;
+// const num2 = 3.14;
+// const num3 = -5;
+// const num4 = 1e6;
+
+console.log(typeof num1, typeof num2, typeof num3, typeof num4);
+console.log(num1 + num2, num1 - num3, num2 * num3, num4 / num1, num1 % 3);
+console.log(typeof Infinity, typeof NaN);
+console.log(0 / 0, 1 / 0, -1 / 0);
+
+function numberInfo(n) {
+  return {
+    type: typeof n,
+    isInteger: Number.isInteger(n),
+    isPositive: n > 0,
+    isFinite: Number.isFinite(n),
+    value: n
+  };
+}
+
+// Problem 2: String Type
+const str1 = "Hello";
+const str2 = 'World';
+const str3 = `Template`;
+
+console.log(typeof str1, typeof str2, typeof str3);
+console.log(str1 + " " + str2);
+console.log(`${str1} ${str2}!`);
+console.log(str1.length, str1[0], str1.charAt(0));
+
+function stringAnalyzer(str) {
+  return {
+    length: str.length,
+    firstChar: str[0] || null,
+    lastChar: str[str.length - 1] || null,
+    isEmpty: str.length === 0,
+    type: typeof str
+  };
+}
+
+// Problem 3: Boolean Type
+const bool1 = true;
+const bool2 = false;
+const truthy1 = 1;
+const falsy1 = 0;
+
+console.log(typeof bool1, typeof bool2);
+console.log(Boolean(0), Boolean(""), Boolean(null), Boolean(undefined));
+console.log(!!0, !!"", !!null);
+console.log(true && false, true || false, !true);
+
+function isTruthy(value) {
+  return Boolean(value);
+}
+
+// Problem 4: Undefined and Null
+let undefVar;
+const nullVar = null;
+
+console.log(typeof undefVar, typeof nullVar);
+console.log(undefined == null, undefined === null);
+console.log(undefVar === undefined, nullVar === null);
+
+function checkValue(val) {
+  if (val === undefined) return "undefined";
+  if (val === null) return "null";
+  if (val === "") return "empty string";
+  if (val === 0) return "zero";
+  return "has value";
+}

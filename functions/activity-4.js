@@ -97,3 +97,73 @@ const students = [
 //    - Applies functions right to left
 //    Example: compose(upperCase, addPrefix)("hello")
 
+// Problem 1: Functions as Arguments
+
+const forEachCustom = (arr, callback) => {
+    for (let i = 0; i < arr.length; i++) callback(arr[i], i, arr);
+};
+
+const mapCustom = (arr, transform) => {
+    const result = [];
+    for (let i = 0; i < arr.length; i++) result.push(transform(arr[i], i, arr));
+    return result;
+};
+
+const filterCustom = (arr, predicate) => {
+    const result = [];
+    for (let i = 0; i < arr.length; i++) if (predicate(arr[i], i, arr)) result.push(arr[i]);
+    return result;
+};
+
+const reduceCustom = (arr, reducer, initial) => {
+    let acc = initial;
+    for (let i = 0; i < arr.length; i++) acc = reducer(acc, arr[i], i, arr);
+    return acc;
+};
+
+// Problem 2: Functions as Return Values
+
+const createGreeter = (greeting) => (name) => `${greeting}, ${name}!`;
+
+const createCalculator = () => ({
+    add: (a, b) => a + b,
+    subtract: (a, b) => a - b,
+    multiply: (a, b) => a * b,
+    divide: (a, b) => a / b
+});
+
+const createPipeline = (...fns) => (value) => fns.reduce((v, fn) => fn(v), value);
+
+// Problem 3: Callback Functions
+
+const processData = (data, callback) => {
+    const processed = data * 2;
+    callback(processed);
+};
+
+const fetchUser = (userId, callback) => {
+    setTimeout(() => {
+        callback({ id: userId, name: "User" + userId });
+    }, 500);
+};
+
+const retryOperation = (operation, maxRetries, onSuccess, onError, attempt = 0) => {
+    try {
+        const result = operation();
+        onSuccess(result);
+    } catch (err) {
+        if (attempt < maxRetries) {
+            retryOperation(operation, maxRetries, onSuccess, onError, attempt + 1);
+        } else {
+            onError(err);
+        }
+    }
+};
+
+// Problem 4: Functional Programming Patterns
+
+const getName = (student) => student.name;
+const getScore = (student) => student.score;
+const isPassing = (student) => student.score >= 70;
+
+const compose = (...fns) => (value) => fns.reduceRight((v, fn) => fn(v), value);

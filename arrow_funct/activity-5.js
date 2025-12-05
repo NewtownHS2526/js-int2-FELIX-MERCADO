@@ -61,3 +61,108 @@
 // 3. Challenge: Create a 'createGameScore' that tracks multiple players' scores using closures
 //    Methods: addScore(player, points), getScore(player), getLeader()
 
+/*
+ * ACTIVITY 5: Complex Arrow Function Patterns
+ */
+
+// Problem 1: Default Parameters
+const greet = (name = "Guest") => `Hello, ${name}!`;
+console.log(greet());
+console.log(greet("Felix"));
+
+const calculatePrice = (price, tax = 0.1, discount = 0) => price * (1 + tax) - discount;
+console.log(calculatePrice(100));
+console.log(calculatePrice(100, 0.2, 10));
+
+const formatDate = (date = new Date(), format = "YYYY-MM-DD") => {
+    const d = new Date(date);
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth()+1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
+    return format === "YYYY-MM-DD" ? `${yyyy}-${mm}-${dd}` : `${mm}/${dd}/${yyyy}`;
+};
+console.log(formatDate());
+console.log(formatDate("2025-12-04", "MM/DD/YYYY"));
+
+// Problem 2: Rest Parameters
+const sumAll = (...nums) => nums.reduce((acc, n) => acc + n, 0);
+console.log(sumAll(1,2,3,4,5));
+
+const findMax = (...nums) => Math.max(...nums);
+console.log(findMax(10,5,20,8));
+
+const combineStrings = (sep, ...strings) => strings.join(sep);
+console.log(combineStrings("-", "a","b","c"));
+
+const createLogger = () => (...args) => console.log(`[${new Date().toISOString()}]`, ...args);
+const logger = createLogger();
+logger("Hello","world");
+
+// Problem 3: Currying
+const add = a => b => a + b;
+console.log(add(5)(10));
+
+const multiply = a => b => c => a * b * c;
+console.log(multiply(2)(3)(4));
+
+const curry = fn => {
+    const arity = fn.length;
+    const curried = (...args) => args.length >= arity ? fn(...args) : (...more) => curried(...args, ...more);
+    return curried;
+};
+const curriedAdd = curry((a,b,c) => a+b+c);
+console.log(curriedAdd(1)(2)(3));
+console.log(curriedAdd(1,2)(3));
+
+// Problem 4: Closures
+const createCounter = () => {
+    let count = 0;
+    return {
+        increment: () => ++count,
+        decrement: () => --count,
+        getValue: () => count,
+        reset: () => { count = 0; return count; }
+    };
+};
+const counter = createCounter();
+console.log(counter.increment());
+console.log(counter.increment());
+console.log(counter.decrement());
+console.log(counter.getValue());
+console.log(counter.reset());
+
+const createBankAccount = () => {
+    let balance = 0;
+    return {
+        deposit: amount => { balance += amount; return balance; },
+        withdraw: amount => { balance = Math.max(0, balance - amount); return balance; },
+        getBalance: () => balance
+    };
+};
+const account = createBankAccount();
+console.log(account.deposit(100));
+console.log(account.withdraw(30));
+console.log(account.withdraw(100));
+console.log(account.getBalance());
+
+const createGameScore = () => {
+    const scores = {};
+    return {
+        addScore: (player, points) => { scores[player] = (scores[player] || 0) + points; return scores[player]; },
+        getScore: player => scores[player] || 0,
+        getLeader: () => {
+            let leader = null, max = -Infinity;
+            for (let player in scores) {
+                if (scores[player] > max) { max = scores[player]; leader = player; }
+            }
+            return leader;
+        }
+    };
+};
+const game = createGameScore();
+game.addScore("Alice",10);
+game.addScore("Bob",15);
+game.addScore("Alice",5);
+console.log(game.getScore("Alice"));
+console.log(game.getScore("Bob"));
+console.log(game.getLeader());

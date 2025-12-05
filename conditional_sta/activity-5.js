@@ -87,3 +87,57 @@ function processOrder(order) {
 // - Returns {valid: true/false, errors: []} with detailed error messages
 // - Uses guard clauses and conditional checks throughout
 
+// ACTIVITY 5: Error Handling and Edge Cases
+
+// Problem 1: Guard Clauses
+function processUser(user) {
+    if (!user) return "Error: user is null or undefined";
+    if (!user.name) return "Error: user.name is missing";
+    if (typeof user.age !== "number" || user.age < 0) return "Error: invalid age";
+    return `Processed: ${user.name}`;
+}
+
+// Problem 2: Null/Undefined Checks
+function safeGet(obj, path) {
+    return path.split('.').reduce((acc, key) => acc && acc[key] !== undefined ? acc[key] : null, obj);
+}
+
+function getUserCity(data) {
+    if (!data || !data.user || !data.user.address) return "Unknown";
+    return data.user.address.city ?? "Unknown";
+}
+
+// Problem 3: Input Validation
+function calculateDiscount(price, discountPercent) {
+    if (typeof price !== "number" || price <= 0) {
+        return { success: false, error: "Invalid price" };
+    }
+    if (typeof discountPercent !== "number" || discountPercent < 0 || discountPercent > 100) {
+        return { success: false, error: "Invalid discount percent" };
+    }
+    const result = price * (1 - discountPercent / 100);
+    return { success: true, result };
+}
+
+// Problem 4: Complex Error Handling
+function processOrder(order) {
+    if (!order) return "Error: order missing";
+    if (!Array.isArray(order.items) || order.items.length === 0) return "Error: invalid order items";
+    if (typeof order.total !== "number" || order.total < 0) return "Error: invalid total";
+    if (!order.customer || !order.customer.name) return "Error: invalid customer data";
+    return "Order processed successfully";
+}
+
+function validateOrder(order) {
+    const errors = [];
+
+    if (!order) errors.push("Order is required");
+    if (!order?.items || !Array.isArray(order.items) || order.items.length === 0) errors.push("Items must be a non-empty array");
+    if (typeof order?.total !== "number" || order.total < 0) errors.push("Total must be a non-negative number");
+    if (!order?.customer || !order.customer.name) errors.push("Customer information is incomplete");
+
+    return {
+        valid: errors.length === 0,
+        errors
+    };
+}

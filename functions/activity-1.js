@@ -71,3 +71,87 @@ function sayHello() {
 //    - Returns an object with: {value, isEven, isPositive, square, double}
 //    - All properties calculated from the input number
 
+// ACTIVITY 1: Function Basics
+
+// Problem 1: Function Declarations
+function greet(name) {
+    return `Hello, ${name}!`;
+}
+
+function add(a, b) {
+    return a + b;
+}
+
+function multiply(a, b) {
+    return a * b;
+}
+
+function calculate(a, b, operation) {
+    switch (operation) {
+        case "add": return add(a, b);
+        case "subtract": return a - b;
+        case "multiply": return multiply(a, b);
+        case "divide": return b !== 0 ? a / b : "Error: Division by zero";
+        default: return "Error: Invalid operation";
+    }
+}
+
+// Problem 2: Function Expressions
+const sayGoodbye = function() {
+    return "Goodbye!";
+};
+
+// Variants (Declaration, Expression, Arrow)
+function sampleDecl(x) { return x; }
+const sampleExpr = function(x) { return x; };
+const sampleArrow = x => x;
+
+// Problem 3: Parameters and Arguments
+function introduce(name, age) {
+    return `I'm ${name} and I'm ${age} years old`;
+}
+
+function fullName(firstName, lastName) {
+    return `${firstName} ${lastName}`;
+}
+
+function sumAll(...args) {
+    if (args.length === 0) return 0;
+    return args.reduce((sum, num) => (typeof num === "number" ? sum + num : sum), 0);
+}
+
+// Problem 4: Return Values
+function isEven(num) {
+    return num % 2 === 0;
+}
+
+function getMax(a, b) {
+    return a > b ? a : b;
+}
+
+function formatName(firstName, lastName) {
+    return `${lastName}, ${firstName}`;
+}
+
+function analyzeNumber(num) {
+    return {
+        value: num,
+        isEven: isEven(num),
+        isPositive: num > 0,
+        square: num * num,
+        double: num * 2
+    };
+}
+
+// Tests
+console.log(greet("Alice"));
+console.log(add(5, 3));
+console.log(multiply(4, 7));
+console.log(calculate(10, 2, "add"));
+console.log(introduce("Alice", 25));
+console.log(fullName("John", "Doe"));
+console.log(sumAll(1, 2, 3));
+console.log(isEven(4));
+console.log(getMax(10, 20));
+console.log(formatName("John", "Doe"));
+console.log(analyzeNumber(5));
